@@ -2,7 +2,7 @@ resources:
 - name: attendee-service-source
   type: git
   source:
-    uri: https://github.com/bcampoli/attendee-service
+    uri: https://github.com/bcampoli/pcf-attendee-service-code.git
     branch: master
 - name: deploy-attendee-service
   type: cf
