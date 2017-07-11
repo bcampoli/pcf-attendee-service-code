@@ -33,8 +33,8 @@ jobs:
     file: attendee-service-source/ci/tasks/package.yml
   - put: deploy-attendee-service
     params:
-      manifest: attendee-service/manifest.yml
-      path: package-output/attendee-service.jar
+      manifest: attendee-service-source/manifest.yml
+      path: package-output/attendee-service-source.jar
 
 - name: smoke_test
   public: true
