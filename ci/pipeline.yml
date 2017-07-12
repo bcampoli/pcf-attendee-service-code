@@ -14,6 +14,7 @@ resources:
     space: development
     skip_cert_check: true
 
+
 jobs:
 - name: test
   public: true
@@ -23,17 +24,17 @@ jobs:
   - task: test
     file: attendee-service-source/ci/tasks/test.yml
 
-- name: deploy
+- name: test_deploy
   public: true
   plan:
-  - get: attendee-service-source
+  - get: attendee-service-source-temp
     trigger: true
     passed: [test]
   - task: package
     file: attendee-service-source/ci/tasks/package.yml
   - put: deploy-attendee-service
     params:
-      manifest: attendee-service-source/manifest.yml
+      manifest: attendee-service-source/manifest-temp.yml
       path: package-output/attendee-service.jar
 
 - name: smoke_test
@@ -41,8 +42,32 @@ jobs:
   plan:
   - get: attendee-service-source
     trigger: true
-    passed: [deploy]
+    passed: [test_deploy]
   - task: smoke_test
     file: attendee-service-source/ci/tasks/smoke-test.yml
     params:
-      ATTENDEE_SERVICE_URL: http://attendee-service-semisynthetic-rose.cfapps.io
+      ATTENDEE_SERVICE_URL: http://attendee-service-bunodont-desolator-temp.cfapps.io
+
+- name: deploy
+  public: true
+  plan:
+  - get: attendee-service-source
+    trigger: true
+    passed: [smoke-test]
+  - task: package
+    file: attendee-service-source/ci/tasks/package.yml
+  - put: deploy-attendee-service
+    params:
+      manifest: attendee-service-source/manifest.yml
+      path: package-output/attendee-service.jar
+
+- name: smoke_test_true
+  public: true
+  plan:
+  - get: attendee-service-source
+    trigger: true
+    passed: [test-deploy]
+  - task: smoke_test
+    file: attendee-service-source/ci/tasks/smoke-test.yml
+    params:
+      ATTENDEE_SERVICE_URL: http://attendee-service-bunodont-desolator.cfapps.io
