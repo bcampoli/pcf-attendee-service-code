@@ -7,4 +7,5 @@ pushd attendee-service-source
 	echo "Running Tests"
 	./mvnw test
 popd
+echo "done....."
 exit 0
