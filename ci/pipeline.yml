@@ -24,7 +24,7 @@ jobs:
   - task: test
     file: attendee-service-source/ci/tasks/test.yml
 
-- name: test_deploy
+- name: deploy
   public: true
   plan:
   - get: attendee-service-source
@@ -42,20 +42,18 @@ jobs:
   plan:
   - get: attendee-service-source
     trigger: true
-    passed: [test_deploy]
+    passed: [deploy]
   - task: smoke_test
     file: attendee-service-source/ci/tasks/smoke-test.yml
     params:
       ATTENDEE_SERVICE_URL: http://{{cf-app-suffix-temp}}-{{cf-route}}-temp.{{cf-app-domain}}
 
-- name: deploy
+- name: re-route
   public: true
   plan:
   - get: attendee-service-source
     trigger: true
-    passed: [smoke-test]
-  - task: package
-    file: attendee-service-source/ci/tasks/package.yml
+    passed: [smoke_test]
   - task: re-route
     file: attendee-service-source/ci/tasks/re-route.yml
     params:
@@ -74,7 +72,7 @@ jobs:
   plan:
   - get: attendee-service-source
     trigger: true
-    passed: [test-deploy]
+    passed: [re-route]
   - task: smoke_test
     file: attendee-service-source/ci/tasks/smoke-test.yml
     params:
