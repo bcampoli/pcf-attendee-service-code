@@ -7,5 +7,5 @@ pushd attendee-service-source
 	echo "Running Tests"
 	./mvnw test
 popd
-echo "done....."
+echo "done.....THIS IS ANOTHER USELESS COMMIT"
 exit 0
